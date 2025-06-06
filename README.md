@@ -4,7 +4,7 @@ A comprehensive educational project for building compiler passes to optimize mac
 
 ## Project Overview
 
-This project demonstrates the development of a simple yet comprehensive ML compiler that includes:
+This project aims to demonstrates the development of a simple yet comprehensive ML compiler that includes:
 
 - **Operator Fusion**: Combine multiple operations to reduce memory bandwidth and improve performance
 - **Memory Layout Optimization**: Transform tensor layouts for better cache performance
@@ -12,49 +12,7 @@ This project demonstrates the development of a simple yet comprehensive ML compi
 - **Custom Accelerator Support**: Target novel architectures like Cerebras-like wafer-scale processors
 - **Framework Integration**: Work with PyTorch and TensorFlow models
 
-## Skills Developed
 
-### Core Compiler Concepts
-- **Intermediate Representation (IR) Manipulation**: Learn to work with computation graphs and apply transformations
-- **Pass Infrastructure**: Build modular compiler passes that can be composed into optimization pipelines
-- **Pattern Matching and Rewriting**: Implement graph pattern matching for optimization opportunities
-
-### ML-Specific Optimizations
-- **Operator Fusion**: Implement fusion strategies for convolution chains, elementwise operations, and custom patterns
-- **Memory Optimization**: Handle tensor layout transformations, buffer reuse, and memory coalescing
-- **Hardware Targeting**: Generate code for different accelerator architectures
-
-### Advanced Features
-- **Custom Accelerator Backends**: Support for Cerebras-like massively parallel architectures
-- **Performance Modeling**: Estimate and compare performance across different backends
-- **Auto-tuning Integration**: Optimize kernel parameters for specific hardware
-
-## Project Structure
-
-```
-ml-compiler-dev-tvm-mlir/
-├── src/                          # Core compiler implementation
-│   ├── passes/                   # Compiler passes
-│   │   ├── fusion.py            # Operator fusion passes
-│   │   ├── memory.py            # Memory optimization passes
-│   │   ├── tvm_passes.py        # TVM-specific passes
-│   │   └── mlir_passes.py       # MLIR-specific passes
-│   ├── backends/                 # Hardware backend support
-│   │   ├── custom.py            # Custom accelerator backends
-│   │   ├── cpu.py               # CPU backends
-│   │   └── gpu.py               # GPU backends
-│   ├── integration/              # Framework integration
-│   │   ├── pytorch_integration.py
-│   │   └── tensorflow_integration.py
-│   └── utils/                    # Utility functions
-├── examples/                     # Usage examples
-│   ├── basic_usage.py           # Basic compiler functionality
-│   └── pytorch_integration_example.py
-├── tests/                        # Test suite
-├── docs/                         # Documentation
-├── third_party/                  # External dependencies (TVM, LLVM/MLIR)
-└── setup_dev_env.sh             # Environment setup script
-```
 
 ## Getting Started
 
@@ -142,6 +100,16 @@ results = cerebras_backend.execute(compiled_graph, inputs)
 ### Performance Comparison
 
 Compare performance across different backends and against hand-tuned kernels.
+
+## Educational Goals
+
+This project teaches:
+
+1. **Compiler Design Principles**: How modern ML compilers work
+2. **Optimization Techniques**: Common optimization strategies for ML workloads
+3. **Hardware Targeting**: How to generate efficient code for different architectures
+4. **Performance Analysis**: How to measure and improve compiler effectiveness
+5. **Practical Implementation**: Real-world compiler development skills
 
 ## Dependencies
 
