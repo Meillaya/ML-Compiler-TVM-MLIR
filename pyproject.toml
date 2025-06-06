@@ -1,0 +1,14 @@
+[project]
+name = "ml-compiler-dev"
+version = "0.1.0"
+description = "A project to build a simple compiler for machine learning workloads."
+requires-python = ">=3.8"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "tensorflow",
+]
+
+[tool.uv]
+# This section can be used for uv configuration. 
