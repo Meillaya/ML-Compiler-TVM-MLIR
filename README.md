@@ -101,22 +101,6 @@ results = cerebras_backend.execute(compiled_graph, inputs)
 
 Compare performance across different backends and against hand-tuned kernels.
 
-## Educational Goals
-
-This project teaches:
-
-1. **Compiler Design Principles**: How modern ML compilers work
-2. **Optimization Techniques**: Common optimization strategies for ML workloads
-3. **Hardware Targeting**: How to generate efficient code for different architectures
-4. **Performance Analysis**: How to measure and improve compiler effectiveness
-5. **Practical Implementation**: Real-world compiler development skills
-
-## Dependencies
-
-- **TVM**: Tensor compiler stack for optimizing ML workloads
-- **MLIR**: Multi-level intermediate representation for compiler infrastructure
-- **LLVM**: Compiler infrastructure for code generation
-- **PyTorch/TensorFlow**: ML framework integration
 
 ## References
 
