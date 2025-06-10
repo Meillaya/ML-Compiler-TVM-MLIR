@@ -1,46 +1,65 @@
 #!/bin/bash
-# Script to rebuild LLVM/MLIR with proper header installation
+# Script to install pre-built LLVM/MLIR from Arch Linux packages instead of building.
 
 set -e
 
-LLVM_VERSION="llvmorg-17.0.6"
-NUM_CORES=$(nproc)
+# Using LLVM from Arch Linux packages.
+# To use the latest llvm from pacman, leave LLVM_VERSION empty.
+# For a specific version, use e.g., "17".
+LLVM_VERSION="" # Using latest pre-built version from Arch repos.
 
-echo "--- Rebuilding LLVM/MLIR with proper installation ---"
+if [ -z "${LLVM_VERSION}" ]; then
+    echo "--- Installing latest pre-built LLVM/MLIR from Arch Linux packages ---"
+else
+    echo "--- Installing pre-built LLVM/MLIR version ${LLVM_VERSION} from Arch Linux packages ---"
+fi
 
-if [ ! -d "third_party/llvm-project" ]; then
-    echo "ERROR: LLVM source not found. Run the main setup script first."
+# This script is intended for Arch Linux, so we check for pacman.
+if ! command -v pacman &> /dev/null; then
+    echo "ERROR: 'pacman' command not found. This script is designed for Arch Linux."
     exit 1
 fi
 
-cd third_party/llvm-project
+# Install required LLVM packages using pacman.
+if [ -z "${LLVM_VERSION}" ]; then
+    echo "--- Installing latest LLVM with MLIR support ---"
+    sudo pacman -Syu --needed llvm llvm-libs clang lld
+    LLVM_CONFIG_PATH="/usr/bin/llvm-config"
+else
+    echo "--- Installing LLVM ${LLVM_VERSION} with MLIR support ---"
+    sudo pacman -Syu --needed \
+        llvm${LLVM_VERSION} \
+        llvm${LLVM_VERSION}-libs \
+        clang${LLVM_VERSION} \
+        lld${LLVM_VERSION}
+    LLVM_CONFIG_PATH="/usr/lib/llvm${LLVM_VERSION}/bin/llvm-config"
+fi
 
-echo "--- Configuring LLVM/MLIR with installation ---"
-rm -rf build
-cmake -G Ninja -S llvm -B build \
-    -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX="${PWD}/build" \
-    -DLLVM_ENABLE_PROJECTS="mlir;lld" \
-    -DLLVM_ENABLE_ASSERTIONS=OFF \
-    -DLLVM_TARGETS_TO_BUILD="Native"
+# Verify the installation.
+echo "--- Verifying LLVM installation ---"
 
-echo "--- Building LLVM/MLIR ---"
-cmake --build build -j${NUM_CORES}
+if ! ${LLVM_CONFIG_PATH} --version; then
+    echo "ERROR: LLVM installation failed or llvm-config is not available at ${LLVM_CONFIG_PATH}"
+    exit 1
+fi
 
-echo "--- Installing LLVM/MLIR headers and libraries ---"
-cmake --build build --target install
+LLVM_PREFIX=$(${LLVM_CONFIG_PATH} --prefix)
+echo "LLVM version: $(${LLVM_CONFIG_PATH} --version)"
+echo "LLVM install prefix: ${LLVM_PREFIX}"
 
 echo "--- Verifying MLIR headers are installed ---"
-if [ -f "build/include/mlir/Analysis/Presburger/IntegerRelation.h" ]; then
-    echo "✓ MLIR headers installed successfully"
+MLIR_INCLUDE_DIR=$(${LLVM_CONFIG_PATH} --includedir)
+MLIR_HEADER="mlir/Analysis/Presburger/IntegerRelation.h"
+
+# The header path for versioned LLVM on Arch is typically under /usr/lib/llvm<version>/include
+# but llvm-config should give the correct path.
+if [ -f "${MLIR_INCLUDE_DIR}/${MLIR_HEADER}" ]; then
+    echo "✓ MLIR headers installed successfully at ${MLIR_INCLUDE_DIR}/${MLIR_HEADER}"
 else
-    echo "✗ MLIR headers not found after installation"
+    echo "✗ MLIR header not found at the expected path: ${MLIR_INCLUDE_DIR}/${MLIR_HEADER}"
+    echo "Please verify the contents of the llvm${LLVM_VERSION} package."
     exit 1
 fi
 
-cd ../..
-
-echo "--- LLVM/MLIR rebuild with installation complete ---"
-echo "Now you can retry building TVM" 
+echo "--- LLVM/MLIR installation from pre-built packages is complete. ---"
+echo "You can now proceed with building TVM." 
