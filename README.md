@@ -1,90 +1,56 @@
 # ML Compiler Development with TVM and MLIR
 
-A comprehensive educational project for building compiler passes to optimize machine learning workloads using TVM and MLIR frameworks.
+A comprehensive educational framework for developing compiler passes that optimize machine learning workloads, with a particular focus on targeting novel architectures like Cerebras-like wafer-scale processors. This project demonstrates the theoretical foundations and practical implementation of ML compiler optimization techniques including operator fusion, memory layout optimization, auto-tuning, and custom accelerator targeting.
 
-## Project Overview
+## Overview
 
-This project aims to demonstrates the development of a simple yet comprehensive ML compiler that includes:
+This project serves as an exercise in understanding and implementing ML compiler optimization strategies, drawing inspiration from modern compiler infrastructures like TVM and MLIR. The framework provides hands-on experience with the mathematical foundations of compiler optimization, dataflow analysis, and hardware-specific code generation. A central focus of this work is exploring compilation strategies for massively parallel architectures similar to Cerebras wafer-scale processors, which represent a paradigm shift in ML accelerator design with their 400,000+ processing elements and distributed memory hierarchy.
 
-- **Operator Fusion**: Combine multiple operations to reduce memory bandwidth and improve performance
-- **Memory Layout Optimization**: Transform tensor layouts for better cache performance
-- **Auto-tuning**: Optimize kernels for specific hardware targets
-- **Custom Accelerator Support**: Target novel architectures like Cerebras-like wafer-scale processors
-- **Framework Integration**: Work with PyTorch and TensorFlow models
 
-## Getting Started
+## Quick Start
 
-### Prerequisites
-
-- Python 3.8+
-- CMake 3.18+
-- LLVM/Clang (for building TVM and MLIR)
-- Git
-
-### Environment Setup
-
-1. **Clone the repository**
-2. **Run the setup script** (builds TVM and MLIR):
-   ```bash
-   ./setup_dev_env.sh
-   ```
-3. **Activate the virtual environment**:
-   ```bash
-   source .venv/bin/activate
-   ```
-
-### Quick Start
-
-Run the basic usage example:
+Begin by installing the latest LLVM toolchain from the Arch User Repository, which provides the foundation for both TVM and MLIR compilation.
 
 ```bash
-uv run examples/simple_add.py
+yay -S llvm-git clang-git mlir
 ```
 
-## Key Features
+Clone the repository and navigate to the project directory. The setup script will automatically configure the development environment, build TVM from source with MLIR support, and install all necessary Python dependencies using uv package manager.
 
-### 1. Operator Fusion
-
-```python
-from passes.fusion import OperatorFusionPass, ElementwiseFusionPass
-
-# Fuse common patterns like Conv2D + BatchNorm + ReLU
-fusion_pass = OperatorFusionPass(fusion_patterns=["conv2d_bn_relu", "matmul_add"])
-fused_graph = fusion_pass.apply(computation_graph)
+```bash
+git clone git@github.com:Meillaya/ML-Compiler-TVM-MLIR.git
+cd ml-compiler-dev-tvm-mlir
+./setup_dev_env.sh
 ```
 
-### 2. Memory Layout Optimization
+The setup script handles the process of building TVM with MLIR integration.
 
-```python
-from passes.memory import MemoryLayoutOptimizer, MemoryLayout
-
-# Optimize layout (e.g., NCHW -> NHWC for better fusion)
-memory_optimizer = MemoryLayoutOptimizer(target_layout=MemoryLayout.NHWC)
-optimized_graph = memory_optimizer.apply(graph)
+```bash
+source .venv/bin/activate
 ```
 
-### 3. Custom Accelerator Support
+## Running Examples
 
-```python
-from backends.custom import CerebrasLikeBackend, SystolicArrayBackend
+Execute the PyTorch integration example to observe the complete compilation pipeline in action. This example demonstrates graph extraction from PyTorch models, application of optimization passes, and targeting of different hardware backends including the Cerebras-like wafer-scale processor simulation.
 
-# Target Cerebras-like architecture with 400k cores
-cerebras_backend = CerebrasLikeBackend(cores=400000, memory_per_core_kb=48)
-compiled_graph = cerebras_backend.compile(optimized_graph)
-results = cerebras_backend.execute(compiled_graph, inputs)
+```bash
+uv run examples/pytorch_integration_example.py
 ```
 
-## Advanced Extensions
+The example will load a convolutional neural network, extract its computation graph, apply operator fusion and memory optimization passes, and compare performance across different backend targets. The output provides detailed statistics on optimization effectiveness and execution characteristics for each target architecture.
 
-### Custom Accelerator Targeting
+For a more comprehensive demonstration of the optimization pipeline, run the basic usage example which showcases the full range of compiler passes and backend targeting capabilities.
 
-- **Cerebras-like Wafer-Scale Processors**: Massive parallelism with distributed memory
-- **TPU-like Systolic Arrays**: Optimized for matrix operations
-- **Dataflow Accelerators**: Reconfigurable compute with custom dataflow patterns
+```bash
+uv run examples/basic_usage.py
+```
 
-### Performance Comparison
+## Cerebras-Like Architecture Targeting
 
-Compare performance across different backends and against hand-tuned kernels.
+This project implements a sophisticated simulation of Cerebras-like wafer-scale processor architectures, providing insight into the unique compilation challenges presented by massively parallel spatial computing systems. The Cerebras WSE represents a fundamental departure from traditional GPU architectures, featuring hundreds of thousands of processing elements with distributed memory and dataflow execution models.
+
+The compiler framework addresses the specific characteristics of wafer-scale architectures including non-uniform memory access patterns, complex communication topologies, and the need for sophisticated load balancing across tens of thousands of processing elements. The implementation explores how traditional compiler optimizations must be adapted for architectures where communication costs dominate computation costs and where spatial mapping of operations becomes critical for performance.
+
 
 
 ## References
