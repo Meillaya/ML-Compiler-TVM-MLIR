@@ -54,7 +54,7 @@ The compiler framework addresses the specific characteristics of wafer-scale arc
 
 
 ## References
-
+- [Cerebras Inference Documentation](https://inference-docs.cerebras.ai/quickstart)
 - [TVM Documentation](https://tvm.apache.org/docs/)
 - [MLIR Documentation](https://mlir.llvm.org/)
 - [LLVM Documentation](https://llvm.org/docs/) 
