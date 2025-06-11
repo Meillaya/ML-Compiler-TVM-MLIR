@@ -12,8 +12,6 @@ This project aims to demonstrates the development of a simple yet comprehensive 
 - **Custom Accelerator Support**: Target novel architectures like Cerebras-like wafer-scale processors
 - **Framework Integration**: Work with PyTorch and TensorFlow models
 
-
-
 ## Getting Started
 
 ### Prerequisites
@@ -40,20 +38,7 @@ This project aims to demonstrates the development of a simple yet comprehensive 
 Run the basic usage example:
 
 ```bash
-python examples/basic_usage.py
-```
-
-This demonstrates:
-- Operator fusion passes
-- Memory layout optimization
-- MLIR compilation pipeline
-- Custom accelerator targeting
-- End-to-end optimization
-
-### PyTorch Integration Example
-
-```bash
-python examples/pytorch_integration_example.py
+uv run examples/simple_add.py
 ```
 
 ## Key Features
