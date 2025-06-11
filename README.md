@@ -1,6 +1,6 @@
 # ML Compiler Development with TVM and MLIR
 
-A comprehensive educational framework for developing compiler passes that optimize machine learning workloads, with a particular focus on targeting novel architectures like Cerebras-like wafer-scale processors. This project demonstrates the theoretical foundations and practical implementation of ML compiler optimization techniques including operator fusion, memory layout optimization, auto-tuning, and custom accelerator targeting.
+This is an educational framework for developing compiler passes that optimize machine learning workloads, with a particular focus on targeting novel architectures like Cerebras-like wafer-scale processors. This project aims to demonstrates the theoretical foundations and practical implementation of ML compiler optimization techniques including operator fusion, memory layout optimization, auto-tuning, and custom accelerator targeting.
 
 ## Overview
 
@@ -23,7 +23,7 @@ cd ml-compiler-dev-tvm-mlir
 ./setup_dev_env.sh
 ```
 
-The setup script handles the process of building TVM with MLIR integration.
+Activate the virtual environment.
 
 ```bash
 source .venv/bin/activate
@@ -31,7 +31,7 @@ source .venv/bin/activate
 
 ## Running Examples
 
-Execute the PyTorch integration example to observe the complete compilation pipeline in action. This example demonstrates graph extraction from PyTorch models, application of optimization passes, and targeting of different hardware backends including the Cerebras-like wafer-scale processor simulation.
+Run the PyTorch integration example to observe the complete compilation pipeline in action. This example demonstrates graph extraction from PyTorch models, application of optimization passes, and targeting of different hardware backends including the Cerebras-like wafer-scale processor simulation.
 
 ```bash
 uv run examples/pytorch_integration_example.py
