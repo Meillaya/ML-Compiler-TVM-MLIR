@@ -32,12 +32,13 @@ class SimpleConstantFoldingPass:
         
     def create_pass(self):
         """Create the TVM pass object."""
+        pass_name = self.name  # Capture the name in the closure
         
         @relax.transform.function_pass(opt_level=1, name="SimpleConstantFolding")
         class SimpleConstantFoldingTransform:
             def transform_function(self, func, mod, ctx):
                 """Transform function by folding simple constants."""
-                logger.info(f"Applying {self.name} pass")
+                logger.info(f"Applying {pass_name} pass")
                 
                 # This is a simplified example - in practice you would
                 # implement more sophisticated constant folding logic
@@ -58,11 +59,12 @@ class ElementwiseBinaryFusionPass:
         
     def create_pass(self):
         """Create a pass that fuses elementwise binary operations."""
+        pass_name = self.name  # Capture the name in the closure
         
         @relax.transform.function_pass(opt_level=2, name="ElementwiseBinaryFusion")
         class ElementwiseBinaryFusionTransform:
             def transform_function(self, func, mod, ctx):
-                logger.info("Applying elementwise binary fusion pass")
+                logger.info(f"Applying {pass_name} pass")
                 
                 # Pattern matching and rewriting would be implemented here
                 # For now, return the function unchanged
@@ -104,7 +106,8 @@ def create_sample_relax_model():
         
         # Dense layer
         weight2 = relax.Var("weight2", relax.TensorStructInfo((1000, 64), "float32"))
-        dense1 = bb.emit(relax.op.linear_algebra.matmul(flatten1, relax.op.transpose(weight2)))
+        weight2_t = bb.emit(relax.op.permute_dims(weight2, axes=[1, 0]))
+        dense1 = bb.emit(relax.op.linear_algebra.matmul(flatten1, weight2_t))
         
         # Return the output
         bb.emit_func_output(dense1, params=[data, weight1, weight2])
